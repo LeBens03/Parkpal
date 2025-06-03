@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Parkpal</string>
+    <string name="app_logo_content_description">Parkpal Logo</string>
+    <string name="welcome_message">Welcome to Parkpal</string>
+    <string name="onboarding_subtitle">Never loose your car again</string>
+    <string name="continue_button_text">Continue</string>
 </resources>

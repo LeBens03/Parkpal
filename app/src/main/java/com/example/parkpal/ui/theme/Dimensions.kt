@@ -23,3 +23,5 @@ val ElevationLarge = 8.dp
 val RadiusSmall = 4.dp
 val RadiusMedium = 8.dp
 val RadiusLarge = 16.dp
+
+val LogoSize = 240.dp
