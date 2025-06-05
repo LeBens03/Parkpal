@@ -4,6 +4,18 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.parkpal.data.dao.CarDAO
+import com.example.parkpal.data.dao.ParkingHistoryDAO
+import com.example.parkpal.data.dao.ParkingLocationDAO
+import com.example.parkpal.data.dao.PublicParkingDAO
+import com.example.parkpal.data.dao.SavedParkingsDAO
+import com.example.parkpal.data.dao.UserDAO
+import com.example.parkpal.data.model.Car
+import com.example.parkpal.data.model.ParkingHistory
+import com.example.parkpal.data.model.ParkingLocation
+import com.example.parkpal.data.model.PublicParking
+import com.example.parkpal.data.model.User
+import com.example.parkpal.data.model.UserPublicParking
 
 @Database(
     entities = [

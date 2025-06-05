@@ -1,4 +1,4 @@
-package com.example.parkpal.onboarding
+package com.example.parkpal.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -20,7 +20,7 @@ import com.example.parkpal.ui.theme.ParkpalTheme
 import com.example.parkpal.ui.theme.SpaceMedium
 
 @Composable
-fun OnboardingScreen(onContinueClicked: () -> Unit) {
+fun WelcomeScreen(onContinueClicked: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,8 +68,8 @@ fun OnboardingScreen(onContinueClicked: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun OnboardingScreenPreview() {
+fun WelcomeScreenPreview() {
     ParkpalTheme {
-        OnboardingScreen(onContinueClicked = {})
+        WelcomeScreen(onContinueClicked = {})
     }
 }

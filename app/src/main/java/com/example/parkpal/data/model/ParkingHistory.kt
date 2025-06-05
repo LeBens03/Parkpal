@@ -1,4 +1,4 @@
-package com.example.parkpal.data
+package com.example.parkpal.data.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -10,15 +10,15 @@ import androidx.room.PrimaryKey
     foreignKeys = [
         ForeignKey(
             entity = Car::class,
-            parentColumns = ["id"],
+            parentColumns = ["carId"],
             childColumns = ["carId"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.Companion.CASCADE
         ),
         ForeignKey(
             entity = ParkingLocation::class,
-            parentColumns = ["id"],
+            parentColumns = ["parkingLocationId"],
             childColumns = ["parkingLocationId"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.Companion.CASCADE
         )
     ],
     indices = [Index("carId"), Index("parkingLocationId")]
@@ -29,4 +29,3 @@ data class ParkingHistory(
     val carId: Int,
     val parkingLocationId: Int
 )
-

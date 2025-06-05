@@ -1,8 +1,7 @@
-package com.example.parkpal.data
+package com.example.parkpal.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
 
 @Entity(tableName = "user_table")
 data class User(
@@ -10,8 +9,8 @@ data class User(
     val userId: Int = 0,
     val name: String,
     val email: String,
-    val password: String,
-    val phoneNumber: String,
+    val password: String?,
+    val phoneNumber: String?,
     val city: String,
-    val birthDate: Date
+    val birthDate: String
 )

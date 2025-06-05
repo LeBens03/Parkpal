@@ -2,8 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-// Required by Room
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.ksp) // Required by Room
+    id("kotlin-kapt") // For data binding
+    alias(libs.plugins.hilt) // Hilt for DI
 }
 
 android {
@@ -38,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        dataBinding = true
     }
     ksp {
         arg("room.schemaLocation",
@@ -67,4 +69,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.hilt.lifecycle.viewmodel)
+    kapt(libs.hilt.compiler)
 }

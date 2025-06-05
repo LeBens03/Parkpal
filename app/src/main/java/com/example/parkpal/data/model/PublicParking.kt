@@ -1,4 +1,4 @@
-package com.example.parkpal.data
+package com.example.parkpal.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "public_parking_table")
 data class PublicParking(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val publicParkingId: Int = 0,
     val apiId: String,         // Unique ID from the API
     val name: String,
     val latitude: Double,

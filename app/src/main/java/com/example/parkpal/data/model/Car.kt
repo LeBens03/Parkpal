@@ -1,24 +1,26 @@
-package com.example.parkpal.data
+package com.example.parkpal.data.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "car_table",
     foreignKeys = [ForeignKey(
         entity = User::class,
-        parentColumns = ["id"],
+        parentColumns = ["userId"],
         childColumns = ["userId"],
-        onDelete = ForeignKey.CASCADE
+        onDelete = ForeignKey.Companion.CASCADE
     ),
         ForeignKey(
             entity = ParkingLocation::class,
-            parentColumns = ["parkingId"],
+            parentColumns = ["parkingLocationId"],
             childColumns = ["currentParkingLocationId"],
-            onDelete = ForeignKey.SET_NULL
+            onDelete = ForeignKey.Companion.SET_NULL
         )
-    ]
+    ],
+    indices = [Index("userId"), Index("currentParkingLocationId")]
 )
 data class Car(
     @PrimaryKey(autoGenerate = true)
