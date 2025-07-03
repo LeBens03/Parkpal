@@ -19,8 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.example.parkpal.R
 import com.example.parkpal.domain.model.Car
 import com.example.parkpal.presentation.viewmodel.CarViewModel
 import com.example.parkpal.presentation.viewmodel.UserViewModel
@@ -48,33 +50,33 @@ fun CarInfoScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Car Information", style = MaterialTheme.typography.headlineMedium)
+        Text(stringResource(R.string.car_information), style = MaterialTheme.typography.headlineMedium)
 
         OutlinedTextField(
             value = brand,
             onValueChange = { brand = it },
-            label = { Text("Brand") },
+            label = { Text(stringResource(R.string.brand)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
             value = model,
             onValueChange = { model = it },
-            label = { Text("Model") },
+            label = { Text(stringResource(R.string.model)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
             value = year,
             onValueChange = { year = it },
-            label = { Text("Year") },
+            label = { Text(stringResource(R.string.year)) },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
             value = licensePlate,
             onValueChange = { licensePlate = it },
-            label = { Text("License Plate") },
+            label = { Text(stringResource(R.string.license_plate)) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -96,11 +98,11 @@ fun CarInfoScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Continue")
+            Text(stringResource(R.string.continue_button))
         }
 
         if (showSuccessToast) {
-            Toast.makeText(context, "Car added successfully!", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, stringResource(R.string.car_added_successfully), Toast.LENGTH_LONG).show()
             showSuccessToast = false
         }
     }

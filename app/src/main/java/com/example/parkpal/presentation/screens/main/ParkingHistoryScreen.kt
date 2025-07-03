@@ -24,8 +24,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.parkpal.R
 import com.example.parkpal.domain.model.ParkingLocation
 import com.example.parkpal.presentation.viewmodel.CarViewModel
 import java.text.SimpleDateFormat
@@ -61,7 +63,7 @@ fun ParkingHistoryScreen(
 
     if (locations.isEmpty()) {
         Text(
-            text = "No parking history found.",
+            text = stringResource(id = R.string.no_parking_history),
             modifier = Modifier.fillMaxSize(),
             textAlign = TextAlign.Center
         )
@@ -78,7 +80,7 @@ fun ParkingHistoryScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Delete All History")
+                Text(stringResource(id = R.string.delete_all_history))
             }
 
             LazyColumn(
@@ -93,7 +95,7 @@ fun ParkingHistoryScreen(
         }
 
         if (showClearToast.value) {
-            Toast.makeText(context, "Parking history cleared", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, stringResource(id = R.string.parking_history_cleared), Toast.LENGTH_SHORT).show()
             showClearToast.value = false
         }
     }
@@ -121,23 +123,23 @@ fun ParkingLocationCard(location: ParkingLocation, parkingHistoryViewModel: Park
                 .padding(16.dp)
         ) {
             Text(
-                text = "Address: ${location.address}",
+                text = stringResource(id = R.string.address_label, location.address),
                 style = MaterialTheme.typography.bodyLarge
             )
 
             Text(
-                text = "Duration: ${formatDuration(location.duration)}",
+                text = stringResource(id = R.string.duration_label, formatDuration(location.duration)),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray
             )
 
             Text(
-                text = "Date: ${formatTimestamp(location.timestamp)}",
+                text = stringResource(id = R.string.date_label, formatTimestamp(location.timestamp)),
                 style = MaterialTheme.typography.bodyMedium
             )
 
             Text(
-                text = "Car Plate: $licensePlate",
+                text = stringResource(id = R.string.car_plate_label, licensePlate),
                 style = MaterialTheme.typography.bodyMedium
             )
 
@@ -148,13 +150,13 @@ fun ParkingLocationCard(location: ParkingLocation, parkingHistoryViewModel: Park
                 },
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                Text("Delete")
+                Text(stringResource(id = R.string.delete))
             }
         }
     }
 
     if (showDeleteToast.value) {
-        Toast.makeText(context, "Parking location deleted", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, stringResource(id = R.string.parking_location_deleted), Toast.LENGTH_SHORT).show()
         showDeleteToast.value = false
     }
 }

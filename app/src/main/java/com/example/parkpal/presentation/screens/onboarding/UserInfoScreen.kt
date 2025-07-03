@@ -3,40 +3,25 @@ package com.example.parkpal.presentation.screens.onboarding
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.example.parkpal.presentation.viewmodel.UserViewModel
-import com.example.parkpal.domain.model.User
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.unit.dp
+import com.example.parkpal.R
+import com.example.parkpal.domain.model.User
 import com.example.parkpal.presentation.viewmodel.AuthViewModel
+import com.example.parkpal.presentation.viewmodel.UserViewModel
+import androidx.compose.runtime.livedata.observeAsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,12 +55,12 @@ fun UserInfoScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Complete your profile") },
+                title = { Text(stringResource(R.string.complete_profile)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.back)
                         )
                     }
                 }
@@ -110,7 +95,7 @@ fun UserInfoScreen(
                     }
                 }
             ) {
-                Text("Continue")
+                Text(stringResource(R.string.continue_button))
             }
         }
     ) { paddingValues ->
@@ -125,7 +110,7 @@ fun UserInfoScreen(
 
             TextField(
                 value = name,
-                label = { Text("Name") },
+                label = { Text(stringResource(R.string.name)) },
                 onValueChange = { name = it },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -133,7 +118,7 @@ fun UserInfoScreen(
 
             TextField(
                 value = email,
-                label = { Text("Email") },
+                label = { Text(stringResource(R.string.email)) },
                 onValueChange = {
                     email = it
                     if (emailError) emailError = false
@@ -144,7 +129,7 @@ fun UserInfoScreen(
             )
             if (emailError) {
                 Text(
-                    text = "Please enter a valid email",
+                    text = stringResource(R.string.please_enter_valid_email),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -153,7 +138,7 @@ fun UserInfoScreen(
 
             TextField(
                 value = phoneNumber,
-                label = { Text("Phone Number") },
+                label = { Text(stringResource(R.string.phone_number)) },
                 onValueChange = { phoneNumber = it },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -161,7 +146,7 @@ fun UserInfoScreen(
 
             TextField(
                 value = city,
-                label = { Text("City") },
+                label = { Text(stringResource(R.string.city)) },
                 onValueChange = { city = it },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -169,7 +154,7 @@ fun UserInfoScreen(
 
             TextField(
                 value = birthDate,
-                label = { Text("Birthdate (YYYY-MM-DD)") },
+                label = { Text(stringResource(R.string.birthdate_label)) },
                 onValueChange = { birthDate = it },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -177,7 +162,7 @@ fun UserInfoScreen(
 
             TextField(
                 value = gender,
-                label = { Text("Gender") },
+                label = { Text(stringResource(R.string.gender)) },
                 onValueChange = { gender = it },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -185,7 +170,7 @@ fun UserInfoScreen(
 
             TextField(
                 value = address,
-                label = { Text("Address") },
+                label = { Text(stringResource(R.string.address)) },
                 onValueChange = { address = it },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -193,7 +178,7 @@ fun UserInfoScreen(
 
             TextField(
                 value = country,
-                label = { Text("Country") },
+                label = { Text(stringResource(R.string.country)) },
                 onValueChange = { country = it },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -201,7 +186,7 @@ fun UserInfoScreen(
 
             TextField(
                 value = zipCode,
-                label = { Text("Zip Code") },
+                label = { Text(stringResource(R.string.zip_code)) },
                 onValueChange = { zipCode = it },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -210,7 +195,7 @@ fun UserInfoScreen(
             TextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Password") },
+                label = { Text(stringResource(R.string.password)) },
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 modifier = Modifier.fillMaxWidth()
@@ -223,7 +208,7 @@ fun UserInfoScreen(
                     confirmPassword = it
                     if (passwordError) passwordError = false
                 },
-                label = { Text("Confirm Password") },
+                label = { Text(stringResource(R.string.confirm_password)) },
                 isError = passwordError,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -232,14 +217,14 @@ fun UserInfoScreen(
 
             if (passwordError) {
                 Text(
-                    text = "Passwords have to match",
+                    text = stringResource(R.string.passwords_have_to_match),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
 
             if (showSuccessToast) {
-                Toast.makeText(context, "Signup successful!", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, stringResource(R.string.signup_successful), Toast.LENGTH_LONG).show()
                 showSuccessToast = false
             }
         }

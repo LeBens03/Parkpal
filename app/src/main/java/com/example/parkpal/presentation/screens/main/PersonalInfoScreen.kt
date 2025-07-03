@@ -17,9 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.parkpal.domain.model.User
 import com.example.parkpal.presentation.viewmodel.UserViewModel
+import com.example.parkpal.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +53,6 @@ fun PersonalInfoScreen(
 
     Log.d("PersonalInfoScreen", "User: $currentUser")
 
-    // Update modifiedUser when currentUser changes
     LaunchedEffect(currentUser) {
         currentUser?.let { modifiedUser.value = it.copy() }
     }
@@ -59,18 +60,18 @@ fun PersonalInfoScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Personal Info") },
+                title = { Text(text = stringResource(id = R.string.personal_info)) },
                 navigationIcon = {
                     IconButton(onClick = { onBack() }) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack, // Default back icon
-                            contentDescription = "Back"
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(id = R.string.back)
                         )
                     }
                 },
                 actions = {
                     TextButton(onClick = { isEditable = !isEditable }) {
-                        Text(text = if (isEditable) "Cancel" else "Edit")
+                        Text(text = if (isEditable) stringResource(id = R.string.cancel) else stringResource(id = R.string.edit))
                     }
                 }
             )
@@ -84,7 +85,7 @@ fun PersonalInfoScreen(
                         showSuccessToast = true
                     }
                 ) {
-                    Text("Save")
+                    Text(stringResource(id = R.string.save))
                 }
             }
         }
@@ -95,24 +96,22 @@ fun PersonalInfoScreen(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-
             Spacer(modifier = Modifier.height(16.dp))
 
-            // User Information Fields
-            EditableField("Name", modifiedUser.value.name, isEditable) { modifiedUser.value = modifiedUser.value.copy(name = it) }
-            EditableField("Phone Number", modifiedUser.value.phoneNumber ?: "", isEditable) { modifiedUser.value = modifiedUser.value.copy(phoneNumber = it) }
-            EditableField("Email", modifiedUser.value.email, isEditable) { modifiedUser.value = modifiedUser.value.copy(email = it) }
-            EditableField("Gender", modifiedUser.value.gender ?: "", isEditable) { modifiedUser.value = modifiedUser.value.copy(gender = it) }
-            EditableField("Date of Birth", modifiedUser.value.birthDate, isEditable) { modifiedUser.value = modifiedUser.value.copy(birthDate = it) }
-            EditableField("Address", modifiedUser.value.address ?: "", isEditable) { modifiedUser.value = modifiedUser.value.copy(address = it) }
-            EditableField("City", modifiedUser.value.city, isEditable) { modifiedUser.value = modifiedUser.value.copy(city = it) }
-            EditableField("Country", modifiedUser.value.country ?: "", isEditable) { modifiedUser.value = modifiedUser.value.copy(country = it) }
-            EditableField("Zip Code", modifiedUser.value.zipCode ?: "", isEditable) { modifiedUser.value = modifiedUser.value.copy(zipCode = it) }
+            EditableField(stringResource(id = R.string.name), modifiedUser.value.name, isEditable) { modifiedUser.value = modifiedUser.value.copy(name = it) }
+            EditableField(stringResource(id = R.string.phone_number), modifiedUser.value.phoneNumber ?: "", isEditable) { modifiedUser.value = modifiedUser.value.copy(phoneNumber = it) }
+            EditableField(stringResource(id = R.string.email), modifiedUser.value.email, isEditable) { modifiedUser.value = modifiedUser.value.copy(email = it) }
+            EditableField(stringResource(id = R.string.gender), modifiedUser.value.gender ?: "", isEditable) { modifiedUser.value = modifiedUser.value.copy(gender = it) }
+            EditableField(stringResource(id = R.string.date_of_birth), modifiedUser.value.birthDate, isEditable) { modifiedUser.value = modifiedUser.value.copy(birthDate = it) }
+            EditableField(stringResource(id = R.string.address), modifiedUser.value.address ?: "", isEditable) { modifiedUser.value = modifiedUser.value.copy(address = it) }
+            EditableField(stringResource(id = R.string.city), modifiedUser.value.city, isEditable) { modifiedUser.value = modifiedUser.value.copy(city = it) }
+            EditableField(stringResource(id = R.string.country), modifiedUser.value.country ?: "", isEditable) { modifiedUser.value = modifiedUser.value.copy(country = it) }
+            EditableField(stringResource(id = R.string.zip_code), modifiedUser.value.zipCode ?: "", isEditable) { modifiedUser.value = modifiedUser.value.copy(zipCode = it) }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             if (showSuccessToast) {
-                Toast.makeText(context, "Your information has been updated!", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, stringResource(id = R.string.info_updated), Toast.LENGTH_LONG).show()
                 showSuccessToast = false
             }
         }

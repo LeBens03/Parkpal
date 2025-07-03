@@ -29,9 +29,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.example.parkpal.R
 import com.example.parkpal.presentation.viewmodel.AuthViewModel
 import com.example.parkpal.presentation.viewmodel.UserViewModel
 
@@ -49,15 +51,19 @@ fun SettingsScreen(
     var passwordError by remember { mutableStateOf<String?>(null) }
     var showPasswordChangeDialog by remember { mutableStateOf(false) }
 
+    val passwordsDoNotMatch = stringResource(R.string.passwords_do_not_match)
+    val oldPasswordEmpty = stringResource(R.string.old_password_empty)
+    val newPasswordEmpty = stringResource(R.string.new_password_empty)
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Settings") },
+                title = { Text(text = stringResource(id = R.string.settings)) },
                 navigationIcon = {
                     IconButton(onClick = { onBack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(id = R.string.back)
                         )
                     }
                 }
@@ -71,13 +77,13 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             currentUser?.let {
-                Text("Change Password", style = MaterialTheme.typography.headlineSmall)
+                Text(stringResource(id = R.string.change_password), style = MaterialTheme.typography.headlineSmall)
 
                 OutlinedTextField(
                     value = oldPassword,
                     onValueChange = { oldPassword = it },
-                    label = { Text("Old Password") },
-                    placeholder = { Text("Enter old password") },
+                    label = { Text(stringResource(id = R.string.old_password)) },
+                    placeholder = { Text(stringResource(id = R.string.enter_old_password)) },
                     modifier = Modifier.fillMaxWidth(),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -87,8 +93,8 @@ fun SettingsScreen(
                 OutlinedTextField(
                     value = newPassword,
                     onValueChange = { newPassword = it },
-                    label = { Text("New Password") },
-                    placeholder = { Text("Enter new password") },
+                    label = { Text(stringResource(id = R.string.new_password)) },
+                    placeholder = { Text(stringResource(id = R.string.enter_new_password)) },
                     modifier = Modifier.fillMaxWidth(),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -101,8 +107,8 @@ fun SettingsScreen(
                         confirmPassword = it
                         passwordError?.let { passwordError = null }
                     },
-                    label = { Text("Confirm Password") },
-                    placeholder = { Text("Re-enter new password") },
+                    label = { Text(stringResource(id = R.string.confirm_password)) },
+                    placeholder = { Text(stringResource(id = R.string.reenter_new_password)) },
                     modifier = Modifier.fillMaxWidth(),
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -117,9 +123,9 @@ fun SettingsScreen(
 
                         if (!isPasswordValid) {
                             passwordError = when {
-                                newPassword != confirmPassword -> "Passwords do not match"
-                                oldPassword.isEmpty() -> "Old password cannot be empty"
-                                newPassword.isEmpty() -> "New password cannot be empty"
+                                newPassword != confirmPassword -> passwordsDoNotMatch
+                                oldPassword.isEmpty() -> oldPasswordEmpty
+                                newPassword.isEmpty() -> newPasswordEmpty
                                 else -> null
                             }
                             return@Button
@@ -142,7 +148,7 @@ fun SettingsScreen(
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Reset Password")
+                    Text(stringResource(id = R.string.reset_password))
                 }
 
                 if (showPasswordChangeDialog) {
@@ -151,11 +157,11 @@ fun SettingsScreen(
                             showPasswordChangeDialog = false
                             onBack()
                         },
-                        title = { Text("Password Change") },
-                        text = { Text("Your password has been changed successfully.") },
+                        title = { Text(stringResource(id = R.string.password_change_title)) },
+                        text = { Text(stringResource(id = R.string.password_change_success)) },
                         confirmButton = {
                             TextButton(onClick = { showPasswordChangeDialog = false }) {
-                                Text("OK")
+                                Text(stringResource(id = R.string.ok_button))
                             }
                         }
                     )

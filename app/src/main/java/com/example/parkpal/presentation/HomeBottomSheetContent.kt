@@ -10,7 +10,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.parkpal.R
 import java.util.Locale
 
 @Composable
@@ -27,19 +29,23 @@ fun HomeBottomSheetContent(
             .padding(16.dp)
     ) {
         Text(
-            text = "Parking Details",
+            text = stringResource(id = R.string.parking_details),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
+        val distanceText = distance?.let {
+            String.format(Locale.getDefault(), "%.2f km", it)
+        } ?: stringResource(id = R.string.unknown)
+
         Text(
-            text = "Distance: ${distance?.let { String.format(Locale.getDefault(), "%.2f km", it) } ?: "Unknown"}",
+            text = stringResource(id = R.string.distance_format, distanceText),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
         Text(
-            text = "Address: ${address ?: "Unknown"}",
+            text = stringResource(id = R.string.address_format, address ?: stringResource(id = R.string.unknown)),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(bottom = 16.dp)
         )
@@ -48,7 +54,7 @@ fun HomeBottomSheetContent(
             onClick = onNavigateClick,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Navigate with Google Maps")
+            Text(text = stringResource(id = R.string.navigate_with_google_maps))
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -57,7 +63,7 @@ fun HomeBottomSheetContent(
             onClick = onArrivedClick,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("I Arrived")
+            Text(text = stringResource(id = R.string.i_arrived))
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -66,7 +72,7 @@ fun HomeBottomSheetContent(
             onClick = onShareClick,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Share Location")
+            Text(text = stringResource(id = R.string.share_location))
         }
     }
 }

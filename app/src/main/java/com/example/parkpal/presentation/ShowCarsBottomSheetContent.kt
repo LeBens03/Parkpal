@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.example.parkpal.R
 import com.example.parkpal.domain.model.Car
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun ShowCarsBottomSheetContent(
@@ -43,19 +44,19 @@ fun ShowCarsBottomSheetContent(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_directions_car_24),
-                    contentDescription = "No Cars Icon",
+                    contentDescription = stringResource(id = R.string.no_cars_icon_description),
                     modifier = Modifier.size(64.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "No cars found.",
+                    text = stringResource(id = R.string.no_cars_found),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
         } else {
             Text(
-                text = "Select a Car to Park",
+                text = stringResource(id = R.string.select_car_to_park),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
@@ -93,7 +94,11 @@ fun VehicleCard(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_directions_car_24),
-                contentDescription = "${vehicle.brand} ${vehicle.model} Icon",
+                contentDescription = stringResource(
+                    id = R.string.car_icon_description,
+                    vehicle.brand,
+                    vehicle.model
+                ),
                 modifier = Modifier
                     .size(48.dp)
                     .padding(end = 16.dp)
@@ -102,7 +107,10 @@ fun VehicleCard(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(text = vehicle.brand, style = MaterialTheme.typography.titleMedium)
-                Text(text = "Model: ${vehicle.model}", style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = stringResource(id = R.string.model_label, vehicle.model),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }

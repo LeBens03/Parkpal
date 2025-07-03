@@ -26,6 +26,8 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import com.example.parkpal.R
 
 @Composable
 fun AccountScreen(
@@ -67,22 +69,25 @@ fun AccountScreen(
         HorizontalDivider(thickness = 2.dp)
         Spacer(modifier = Modifier.height(24.dp))
 
-        AccountRow("Personal Info", onPersonalInfoClick )
-        AccountRow("My Vehicle", onMyVehicleClick )
+        AccountRow(stringResource(id = R.string.personal_info), onPersonalInfoClick)
+        AccountRow(stringResource(id = R.string.my_vehicle), onMyVehicleClick)
 
         HorizontalDivider(thickness = 2.dp)
         Spacer(modifier = Modifier.height(16.dp))
 
-        AccountRow("Security", onSecurityClick)
-        AccountRow("Language", {})
-        AccountRow("Dark Mode", {})
+        AccountRow(stringResource(id = R.string.security), onSecurityClick)
+        AccountRow(stringResource(id = R.string.language), onLanguageClick)
+        AccountRow(stringResource(id = R.string.dark_mode), {})
 
         HorizontalDivider(thickness = 2.dp)
         Spacer(modifier = Modifier.height(16.dp))
 
-        AccountRow("Sign Out", onSignOutClick, textColor = MaterialTheme.colorScheme.error)
+        AccountRow(
+            title = stringResource(id = R.string.sign_out),
+            onClick = onSignOutClick,
+            textColor = MaterialTheme.colorScheme.error
+        )
     }
-
 }
 
 @Composable

@@ -36,7 +36,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
+import com.example.parkpal.R
 import com.example.parkpal.domain.model.Car
 import com.example.parkpal.presentation.HomeBottomSheetContent
 import com.example.parkpal.presentation.ShowCarsBottomSheetContent
@@ -85,6 +87,11 @@ fun HomeScreen(
 
     var showCarSelectorSheet by remember { mutableStateOf(false) }
     var selectedCar by remember { mutableStateOf<Car?>(null) }
+
+    var parking_location_label = stringResource(id = R.string.parking_location_label)
+    var address_label = stringResource(id = R.string.address_label)
+    var google_maps = stringResource(id = R.string.google_maps)
+    var share_parking_location = stringResource(id = R.string.share_parking_location)
 
     Log.d("HomeScreen", "Current User cars: $currentUserCars")
     Log.d("HomeScreen", "Selected Car: $selectedCar")
@@ -145,7 +152,7 @@ fun HomeScreen(
                         showCarSelectorSheet = true
                     },
                 ) {
-                    Text("Park My Car")
+                    Text(stringResource(id = R.string.park_my_car))
                 }
             }
         }
@@ -162,8 +169,8 @@ fun HomeScreen(
             parkingMarkerState?.let {
                 Marker(
                     state = parkingMarkerState,
-                    title = "Parked Here",
-                    snippet = "Your car's location",
+                    title = stringResource(id = R.string.parked_here),
+                    snippet = stringResource(id = R.string.car_location),
                     onClick = {
                         showBottomSheet = true
                         true
@@ -209,15 +216,18 @@ fun HomeScreen(
                     state.parkingLocation?.let { location ->
                         val googleMapsLink = "https://www.google.com/maps/search/?api=1&query=${location.latitude},${location.longitude}"
                         val shareText = buildString {
-                            append("Parking Location:\n")
-                            append("Address: $address\n")
-                            append("Google Maps: $googleMapsLink")
+                            append(parking_location_label)
+                            append("\n")
+                            append(address_label)
+                            append(" $address\n")
+                            append(google_maps)
+                            append(": $googleMapsLink")
                         }
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
                             putExtra(Intent.EXTRA_TEXT, shareText)
                         }
-                        context.startActivity(Intent.createChooser(shareIntent, "Share Parking Location"))
+                        context.startActivity(Intent.createChooser(shareIntent, share_parking_location))
                     }
                 }
             )

@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.parkpal.presentation.AddCarBottomSheetContent
 
@@ -48,21 +49,19 @@ fun MyVehicleScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("My Vehicles") },
+                title = { Text(stringResource(id = R.string.my_vehicles)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(id = R.string.back))
                     }
                 },
                 actions = {
                     Button(
-                        onClick = {
-                            showBottomSheet = true
-                        }
+                        onClick = { showBottomSheet = true }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = "Add Vehicle"
+                            contentDescription = stringResource(id = R.string.add_vehicle)
                         )
                     }
                 }
@@ -77,7 +76,7 @@ fun MyVehicleScreen(
                     .padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                Text("No vehicles found.")
+                Text(stringResource(id = R.string.no_vehicles_found))
             }
         } else {
             LazyColumn(
@@ -121,13 +120,12 @@ fun MyVehicleScreen(
     }
 
     if (showAddToast) {
-        Toast.makeText(context, "Car added successfully", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, stringResource(id = R.string.car_added_successfully), Toast.LENGTH_SHORT).show()
         showAddToast = false
     }
 
-    // Show Toast for Delete Car
     if (showDeleteToast) {
-        Toast.makeText(context, "Car deleted successfully", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, stringResource(id = R.string.car_deleted_successfully), Toast.LENGTH_SHORT).show()
         showDeleteToast = false
     }
 }
@@ -138,18 +136,16 @@ fun VehicleCard(
     onDelete: () -> Unit
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(16.dp)
         ) {
-            // Car icon on far left
             Icon(
                 painter = painterResource(id = R.drawable.baseline_directions_car_24),
-                contentDescription = "Car Icon",
+                contentDescription = stringResource(id = R.string.car_icon_desc),
                 modifier = Modifier
                     .size(48.dp)
                     .padding(end = 16.dp)
@@ -159,11 +155,14 @@ fun VehicleCard(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(text = vehicle.brand, style = MaterialTheme.typography.titleMedium)
-                Text(text = "Model: ${vehicle.model}", style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = stringResource(id = R.string.model, vehicle.model),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
 
             TextButton(onClick = onDelete) {
-                Text("Delete", color = MaterialTheme.colorScheme.error)
+                Text(stringResource(id = R.string.delete), color = MaterialTheme.colorScheme.error)
             }
         }
     }

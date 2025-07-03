@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.example.parkpal.presentation.viewmodel.AuthViewModel
 import com.example.parkpal.presentation.viewmodel.AuthState
+import com.example.parkpal.R
 
 @Composable
 fun SignInScreen(
@@ -28,7 +30,7 @@ fun SignInScreen(
     var passwordError by remember { mutableStateOf(false) }
 
     val authState by authViewModel.authState.collectAsState()
-    var context = LocalContext.current
+    val context = LocalContext.current
 
     LaunchedEffect(authState) {
         if (authState is AuthState.Authenticated) {
@@ -43,7 +45,7 @@ fun SignInScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Login", style = MaterialTheme.typography.headlineMedium)
+        Text(stringResource(R.string.login), style = MaterialTheme.typography.headlineMedium)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -53,7 +55,7 @@ fun SignInScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Sign in with Google")
+            Text(stringResource(R.string.sign_in_with_google))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -64,14 +66,14 @@ fun SignInScreen(
                 email = it
                 if (emailError) emailError = false
             },
-            label = { Text("Email") },
+            label = { Text(stringResource(R.string.email)) },
             isError = emailError,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier.fillMaxWidth()
         )
         if (emailError) {
             Text(
-                text = "Please enter a valid email",
+                text = stringResource(R.string.invalid_email_error),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -85,7 +87,7 @@ fun SignInScreen(
                 password = it
                 if (passwordError) passwordError = false
             },
-            label = { Text("Password") },
+            label = { Text(stringResource(R.string.password)) },
             isError = passwordError,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -93,7 +95,7 @@ fun SignInScreen(
         )
         if (passwordError) {
             Text(
-                text = "Password cannot be empty",
+                text = stringResource(R.string.password_empty_error),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -117,18 +119,18 @@ fun SignInScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Login")
+            Text(stringResource(R.string.login))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Row {
             Text(
-                text = "Don't have an account? ",
+                text = stringResource(R.string.no_account_question),
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = "Sign up",
+                text = stringResource(R.string.sign_up),
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable { onSignUp() },

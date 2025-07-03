@@ -52,14 +52,14 @@ fun WelcomeScreen(onContinueClicked: () -> Unit ) {
         Spacer(modifier = Modifier.height(SpaceMedium))
 
         Text(
-            text = stringResource(id = R.string.welcome_message),
+            text = stringResource(id = R.string.welcome_title),
             style = MaterialTheme.typography.headlineMedium
         )
 
         Spacer(modifier = Modifier.height(SpaceMedium))
 
         Text(
-            text = stringResource(id = R.string.onboarding_subtitle),
+            text = stringResource(id = R.string.welcome_subtitle),
             style = MaterialTheme.typography.bodyLarge
         )
     }
