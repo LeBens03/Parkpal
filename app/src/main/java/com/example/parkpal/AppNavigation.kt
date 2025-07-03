@@ -29,6 +29,7 @@ import com.example.parkpal.presentation.screens.onboarding.WelcomeScreen
 import com.example.parkpal.presentation.viewmodel.AuthState
 import com.example.parkpal.presentation.viewmodel.AuthViewModel
 import com.example.parkpal.presentation.viewmodel.CarViewModel
+import com.example.parkpal.presentation.viewmodel.MapViewModel
 import com.example.parkpal.presentation.viewmodel.ParkingHistoryViewModel
 import com.example.parkpal.presentation.viewmodel.UserViewModel
 
@@ -38,9 +39,23 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
     val carViewModel: CarViewModel = hiltViewModel()
     val parkingHistoryViewModel: ParkingHistoryViewModel = hiltViewModel()
     val authViewModel: AuthViewModel = viewModel()
-    var context = LocalContext.current
+    val mapViewModel: MapViewModel = hiltViewModel()
 
     val authState = authViewModel.authState.collectAsState()
+
+    val bottomNavDestinations = listOf(
+        BottomNavDestination.MyCar,
+        BottomNavDestination.ParkingHistory,
+        BottomNavDestination.Account
+    )
+
+    val currentBackStackEntry = navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry.value?.destination?.route
+    val shouldShowBottomNav = bottomNavDestinations.any { it.route == currentRoute }
+
+    var context = LocalContext.current
+
+
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.Unauthenticated -> {
@@ -54,19 +69,6 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
             else -> Unit
         }
     }
-
-    // List of destinations where the Bottom Navigation Bar is visible
-    val bottomNavDestinations = listOf(
-        BottomNavDestination.MyCar,
-        BottomNavDestination.ParkingHistory,
-        BottomNavDestination.Account
-    )
-
-    val currentBackStackEntry = navController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStackEntry.value?.destination?.route
-
-    // Determine if the bottom navigation bar should be shown
-    val shouldShowBottomNav = bottomNavDestinations.any { it.route == currentRoute }
 
     Scaffold(
         bottomBar = {
@@ -114,7 +116,8 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
 
             composable(BottomNavDestination.MyCar.route) { HomeScreen(
                 carViewModel = carViewModel,
-                parkingHistoryViewModel = parkingHistoryViewModel
+                parkingHistoryViewModel = parkingHistoryViewModel,
+                mapViewModel = mapViewModel
             ) }
 
             composable(BottomNavDestination.ParkingHistory.route) { ParkingHistoryScreen(

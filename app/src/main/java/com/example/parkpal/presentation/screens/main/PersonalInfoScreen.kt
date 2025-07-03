@@ -1,6 +1,7 @@
 package com.example.parkpal.presentation.screens.main
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.parkpal.domain.model.User
 import com.example.parkpal.presentation.viewmodel.UserViewModel
@@ -43,6 +45,9 @@ fun PersonalInfoScreen(
             )
         )
     }
+
+    var showSuccessToast by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Log.d("PersonalInfoScreen", "User: $currentUser")
 
@@ -76,6 +81,7 @@ fun PersonalInfoScreen(
                     onClick = {
                         userViewModel.updateUser(modifiedUser.value)
                         isEditable = false
+                        showSuccessToast = true
                     }
                 ) {
                     Text("Save")
@@ -104,6 +110,11 @@ fun PersonalInfoScreen(
             EditableField("Zip Code", modifiedUser.value.zipCode ?: "", isEditable) { modifiedUser.value = modifiedUser.value.copy(zipCode = it) }
 
             Spacer(modifier = Modifier.height(16.dp))
+
+            if (showSuccessToast) {
+                Toast.makeText(context, "Your information has been updated!", Toast.LENGTH_LONG).show()
+                showSuccessToast = false
+            }
         }
     }
 }

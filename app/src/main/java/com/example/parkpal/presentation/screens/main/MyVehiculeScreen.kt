@@ -1,5 +1,6 @@
 package com.example.parkpal.presentation.screens.main
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.parkpal.presentation.AddCarBottomSheetContent
@@ -32,6 +34,10 @@ fun MyVehicleScreen(
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
+    val context = LocalContext.current
+
+    var showAddToast by remember { mutableStateOf(false) }
+    var showDeleteToast by remember { mutableStateOf(false) }
 
     LaunchedEffect(userId) {
         carViewModel.getCarByUserId(userId)
@@ -84,6 +90,7 @@ fun MyVehicleScreen(
                 items(currentUserCars) { car ->
                     VehicleCard(vehicle = car, onDelete = {
                         carViewModel.deleteCar(car)
+                        showDeleteToast = true
                     })
                 }
             }
@@ -106,10 +113,22 @@ fun MyVehicleScreen(
                     )
                     carViewModel.insertCar(newCar)
                     showBottomSheet = false
+                    showAddToast = true
                 },
                 onDismiss = { showBottomSheet = false }
             )
         }
+    }
+
+    if (showAddToast) {
+        Toast.makeText(context, "Car added successfully", Toast.LENGTH_SHORT).show()
+        showAddToast = false
+    }
+
+    // Show Toast for Delete Car
+    if (showDeleteToast) {
+        Toast.makeText(context, "Car deleted successfully", Toast.LENGTH_SHORT).show()
+        showDeleteToast = false
     }
 }
 

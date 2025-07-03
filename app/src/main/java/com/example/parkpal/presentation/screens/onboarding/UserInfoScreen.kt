@@ -2,6 +2,7 @@ package com.example.parkpal.presentation.screens.onboarding
 
 import android.util.Log
 import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.example.parkpal.presentation.viewmodel.UserViewModel
 import com.example.parkpal.domain.model.User
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.example.parkpal.presentation.viewmodel.AuthViewModel
@@ -58,6 +60,9 @@ fun UserInfoScreen(
     var confirmPassword by remember { mutableStateOf("") }
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
+
+    var showSuccessToast by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     val currentUser by userViewModel.currentUser.observeAsState()
     Log.d("UserInfoScreen", "Current user: $currentUser")
@@ -101,6 +106,7 @@ fun UserInfoScreen(
                         userViewModel.insertUser(user)
                         authViewModel.signUp(email, password)
                         onSaveUser()
+                        showSuccessToast = true
                     }
                 }
             ) {
@@ -230,6 +236,11 @@ fun UserInfoScreen(
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall
                 )
+            }
+
+            if (showSuccessToast) {
+                Toast.makeText(context, "Signup successful!", Toast.LENGTH_LONG).show()
+                showSuccessToast = false
             }
         }
     }

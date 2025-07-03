@@ -1,6 +1,7 @@
 package com.example.parkpal.presentation.screens.main
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,8 +19,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import com.example.parkpal.presentation.viewmodel.ParkingHistoryViewModel
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.parkpal.domain.model.ParkingLocation
@@ -38,6 +42,9 @@ fun ParkingHistoryScreen(
     val parkingHistory by parkingHistoryViewModel.currentParkingHistory.collectAsState()
     val locations = parkingHistory?.parkingLocations ?: emptyList()
     val carIds = locations.map { it.carId }
+
+    var showClearToast = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     LaunchedEffect(userId) {
         parkingHistoryViewModel.fetchParkingHistory(userId)
@@ -65,7 +72,10 @@ fun ParkingHistoryScreen(
                 .padding(16.dp)
         ){
             Button(
-                onClick = { parkingHistoryViewModel.clearParkingHistory(userId = userId) },
+                onClick = {
+                    parkingHistoryViewModel.clearParkingHistory(userId = userId)
+                    showClearToast.value = true
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Delete All History")
@@ -81,6 +91,11 @@ fun ParkingHistoryScreen(
                 }
             }
         }
+
+        if (showClearToast.value) {
+            Toast.makeText(context, "Parking history cleared", Toast.LENGTH_SHORT).show()
+            showClearToast.value = false
+        }
     }
 }
 
@@ -89,6 +104,9 @@ fun ParkingLocationCard(location: ParkingLocation, parkingHistoryViewModel: Park
 
     val licensePlates by carViewModel.licensePlates.collectAsState()
     val licensePlate = licensePlates[location.carId] ?: "Unknown"
+
+    var showDeleteToast = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Card(
         modifier = Modifier
@@ -124,12 +142,20 @@ fun ParkingLocationCard(location: ParkingLocation, parkingHistoryViewModel: Park
             )
 
             Button(
-                onClick = { parkingHistoryViewModel.deleteParkingLocation(location) },
+                onClick = {
+                    parkingHistoryViewModel.deleteParkingLocation(location)
+                    showDeleteToast.value = true
+                },
                 modifier = Modifier.padding(top = 8.dp)
             ) {
                 Text("Delete")
             }
         }
+    }
+
+    if (showDeleteToast.value) {
+        Toast.makeText(context, "Parking location deleted", Toast.LENGTH_SHORT).show()
+        showDeleteToast.value = false
     }
 }
 
