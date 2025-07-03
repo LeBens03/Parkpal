@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -21,6 +22,7 @@ import com.example.parkpal.presentation.screens.main.SignInScreen
 import com.example.parkpal.presentation.screens.main.MyVehicleScreen
 import com.example.parkpal.presentation.screens.main.ParkingHistoryScreen
 import com.example.parkpal.presentation.screens.main.PersonalInfoScreen
+import com.example.parkpal.presentation.screens.main.SettingsScreen
 import com.example.parkpal.presentation.screens.onboarding.CarInfoScreen
 import com.example.parkpal.presentation.screens.onboarding.UserInfoScreen
 import com.example.parkpal.presentation.screens.onboarding.WelcomeScreen
@@ -36,6 +38,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
     val carViewModel: CarViewModel = hiltViewModel()
     val parkingHistoryViewModel: ParkingHistoryViewModel = hiltViewModel()
     val authViewModel: AuthViewModel = viewModel()
+    var context = LocalContext.current
 
     val authState = authViewModel.authState.collectAsState()
     LaunchedEffect(authState.value) {
@@ -124,10 +127,10 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
                 userName = userViewModel.currentUser.value?.name ?: "John Doe",
                 onPersonalInfoClick = { navController.navigate("personalInfo") },
                 onMyVehicleClick = { navController.navigate("vehicleInfo") },
-                onSecurityClick = {  },
+                onSecurityClick = { navController.navigate("settingsScreen") },
                 onLanguageClick = {  },
                 onSignOutClick = {
-                    authViewModel.signOut()
+                    authViewModel.signOut(context)
                     navController.navigate("signIn")
                 },
             ) }
@@ -140,6 +143,12 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
             composable("vehicleInfo") { MyVehicleScreen(
                 userId = userViewModel.currentUser.value?.userId ?: 0L,
                 carViewModel = carViewModel,
+                onBack = { navController.popBackStack() }
+            ) }
+
+            composable("settingsScreen") { SettingsScreen(
+                authViewModel = authViewModel,
+                userViewModel = userViewModel,
                 onBack = { navController.popBackStack() }
             ) }
         }

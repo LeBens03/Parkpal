@@ -98,7 +98,13 @@ dependencies {
     implementation(libs.maps.compose)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    implementation(libs.play.services.auth)
 
     // Gson dependencies
     implementation(libs.gson)
+
+    // Credential Manager dependencies
+    implementation(libs.credential.manager)
+    implementation(libs.credential.manager.auth)
+    implementation(libs.google.id)
 }

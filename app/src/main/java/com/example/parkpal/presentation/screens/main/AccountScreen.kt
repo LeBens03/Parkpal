@@ -73,7 +73,7 @@ fun AccountScreen(
         HorizontalDivider(thickness = 2.dp)
         Spacer(modifier = Modifier.height(16.dp))
 
-        AccountRow("Security", {})
+        AccountRow("Security", onSecurityClick)
         AccountRow("Language", {})
         AccountRow("Dark Mode", {})
 

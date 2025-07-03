@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "337762577181",
+    "project_id": "parkpal-progmob",
+    "storage_bucket": "parkpal-progmob.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337762577181:android:113a822db4c2999c550ff4",
+        "android_client_info": {
+          "package_name": "com.example.parkpal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337762577181-dtpsme9cciv6r3htpdfk9vlff7mi39m4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.parkpal",
+            "certificate_hash": "8d8021b20e6907a6daa8bbcd8a1d5d11a33a2222"
+          }
+        },
+        {
+          "client_id": "337762577181-ojiq3mji9o6vh4uqdimo3sj0lvtmm839.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9fDC7e-Nmm-7O00v_zZNDj2akgQOrkOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337762577181-ojiq3mji9o6vh4uqdimo3sj0lvtmm839.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

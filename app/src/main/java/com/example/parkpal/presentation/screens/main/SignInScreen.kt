@@ -7,12 +7,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.example.parkpal.presentation.viewmodel.AuthViewModel
+import com.example.parkpal.presentation.viewmodel.AuthState
 
 @Composable
 fun SignInScreen(
@@ -25,6 +27,15 @@ fun SignInScreen(
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
 
+    val authState by authViewModel.authState.collectAsState()
+    var context = LocalContext.current
+
+    LaunchedEffect(authState) {
+        if (authState is AuthState.Authenticated) {
+            onSignIn()
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -35,6 +46,17 @@ fun SignInScreen(
         Text("Login", style = MaterialTheme.typography.headlineMedium)
 
         Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = {
+                authViewModel.signInWithGoogle(context)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Sign in with Google")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = email,
