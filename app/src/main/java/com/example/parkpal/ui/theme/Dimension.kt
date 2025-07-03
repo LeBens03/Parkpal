@@ -24,4 +24,8 @@ val RadiusSmall = 4.dp
 val RadiusMedium = 8.dp
 val RadiusLarge = 16.dp
 
-val LogoSize = 240.dp
+val LogoSize = 280.dp
+
+// Offsets
+val LogoOffset = 256.dp
+val CircularProgressIndicatorOffset = (-24).dp

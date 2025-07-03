@@ -23,6 +23,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="passwords_have_to_match">Passwords have to match</string>
     <string name="signup_successful">Signup successful!</string>
+    <string name="continue_button">Continue</string>
 
     <!-- Car Info Screen -->
     <string name="car_information">Car Information</string>
@@ -119,6 +120,6 @@
     <string name="car_brand">Car Brand</string>
     <string name="car_model">Car Model</string>
 
-    <string name="continue_button">Continue</string>
+    <!-- Google SignIn Client -->
     <string name="web_client_id">337762577181-ojiq3mji9o6vh4uqdimo3sj0lvtmm839.apps.googleusercontent.com</string>
 </resources>
