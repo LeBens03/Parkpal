@@ -6,13 +6,21 @@ import android.content.pm.PackageManager
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import com.example.parkpal.presentation.viewmodel.MapViewModel
 import com.google.maps.android.compose.GoogleMap
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
@@ -33,10 +41,16 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.example.parkpal.R
 import com.example.parkpal.domain.model.Car
@@ -52,6 +66,13 @@ fun HomeScreen(
     parkingHistoryViewModel: ParkingHistoryViewModel
 ) {
     val state = mapViewModel.state
+    val context = LocalContext.current
+
+    val defaultCityLatLng = LatLng(45.0703, 7.6869)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(defaultCityLatLng, 12f) //
+    }
+
     val uiSettings = remember { MapUiSettings(
         zoomControlsEnabled = false,
         zoomGesturesEnabled = true,
@@ -59,20 +80,16 @@ fun HomeScreen(
         myLocationButtonEnabled = true
     ) }
 
+    val currentUserCars by carViewModel.currentUserCars.collectAsState()
+    val address by mapViewModel.address.collectAsState()
+    val distance by mapViewModel.distance.collectAsState()
     val parkingMarkerState = state.parkingLocation?.let { rememberMarkerState(position = LatLng(it.latitude, it.longitude)) }
-
-    val defaultCityLatLng = LatLng(45.0703, 7.6869)
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(defaultCityLatLng, 12f) //
-    }
-
-    var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
 
-    val currentUserCars by carViewModel.currentUserCars.collectAsState()
-
+    var showBottomSheet by remember { mutableStateOf(false) }
     var permissionsGranted by remember { mutableStateOf(false) }
-    val context = LocalContext.current
+    var showCarSelectorSheet by remember { mutableStateOf(false) }
+    var selectedCar by remember { mutableStateOf<Car?>(null) }
 
     val requestPermissionsLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
@@ -82,16 +99,10 @@ fun HomeScreen(
         }
     )
 
-    val address by mapViewModel.address.collectAsState()
-    val distance by mapViewModel.distance.collectAsState()
-
-    var showCarSelectorSheet by remember { mutableStateOf(false) }
-    var selectedCar by remember { mutableStateOf<Car?>(null) }
-
-    var parking_location_label = stringResource(id = R.string.parking_location_label)
-    var address_label = stringResource(id = R.string.address_label)
-    var google_maps = stringResource(id = R.string.google_maps)
-    var share_parking_location = stringResource(id = R.string.share_parking_location)
+    val parkingLocationLabel = stringResource(id = R.string.parking_location_label)
+    val addressLabel = stringResource(id = R.string.address_label)
+    val googleMaps = stringResource(id = R.string.google_maps)
+    val shareParkingLocation = stringResource(id = R.string.share_parking_location)
 
     Log.d("HomeScreen", "Current User cars: $currentUserCars")
     Log.d("HomeScreen", "Selected Car: $selectedCar")
@@ -100,20 +111,9 @@ fun HomeScreen(
     Log.d("HomeScreen", "Address: $address")
     Log.d("HomeScreen", "Distance: $distance")
 
-    LaunchedEffect(state.parkingLocation, state.userLocation) {
-        mapViewModel.fetchAddress(context, state.parkingLocation)
-        mapViewModel.calculateDistance(state.userLocation, state.parkingLocation)
-    }
-
     LaunchedEffect(Unit) {
-        val fineLocationStatus = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        val coarseLocationStatus = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
+        val fineLocationStatus = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+        val coarseLocationStatus = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
         if (fineLocationStatus == PackageManager.PERMISSION_GRANTED ||
             coarseLocationStatus == PackageManager.PERMISSION_GRANTED
         ) {
@@ -144,15 +144,34 @@ fun HomeScreen(
         }
     }
 
+    LaunchedEffect(state.parkingLocation, state.userLocation) {
+        mapViewModel.fetchAddress(context, state.parkingLocation)
+        mapViewModel.calculateDistance(state.userLocation, state.parkingLocation)
+    }
+
     Scaffold (
         floatingActionButton = {
             if (state.parkingLocation == null && state.userLocation != null) {
-                FloatingActionButton(
-                    onClick = {
-                        showCarSelectorSheet = true
-                    },
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 80.dp, end = 16.dp), // adjust based on nav bar height
+                    contentAlignment = Alignment.BottomEnd
                 ) {
-                    Text(stringResource(id = R.string.park_my_car))
+                    FloatingActionButton(
+                        onClick = { showCarSelectorSheet = true },
+                        modifier = Modifier
+                            .size(56.dp)
+                            .navigationBarsPadding(), // ensures it floats above nav bar
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        elevation = FloatingActionButtonDefaults.elevation(8.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_directions_car_24), // your parking icon
+                            contentDescription = stringResource(id = R.string.park_my_car)
+                        )
+                    }
                 }
             }
         }
@@ -216,18 +235,18 @@ fun HomeScreen(
                     state.parkingLocation?.let { location ->
                         val googleMapsLink = "https://www.google.com/maps/search/?api=1&query=${location.latitude},${location.longitude}"
                         val shareText = buildString {
-                            append(parking_location_label)
+                            append(parkingLocationLabel)
                             append("\n")
-                            append(address_label)
+                            append(addressLabel)
                             append(" $address\n")
-                            append(google_maps)
+                            append(googleMaps)
                             append(": $googleMapsLink")
                         }
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
                             putExtra(Intent.EXTRA_TEXT, shareText)
                         }
-                        context.startActivity(Intent.createChooser(shareIntent, share_parking_location))
+                        context.startActivity(Intent.createChooser(shareIntent, shareParkingLocation))
                     }
                 }
             )

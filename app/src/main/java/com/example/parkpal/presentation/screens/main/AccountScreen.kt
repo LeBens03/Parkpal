@@ -4,30 +4,22 @@ import androidx.compose.ui.graphics.Color
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.height
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.parkpal.R
+import com.example.parkpal.ui.theme.*
 
 @Composable
 fun AccountScreen(
@@ -35,27 +27,27 @@ fun AccountScreen(
     onPersonalInfoClick: () -> Unit,
     onMyVehicleClick: () -> Unit,
     onSecurityClick: () -> Unit,
-    onLanguageClick: () -> Unit,
-    onSignOutClick: () -> Unit
+    onSignOutClick: () -> Unit,
+    isDarkMode: Boolean,
+    onDarkModeToggle: (Boolean) -> Unit
 ) {
     Log.d("ProfileScreen", "User name: $userName")
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.Center,
+                .padding(top = SpaceExtraLarge)
+                .padding(SpaceMedium),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Circular Frame with User Initials
+            // Avatar with initials
             Box(
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(SpaceExtraLarge.times(2)) // 32.dp * 2 = 64.dp, slightly smaller avatar for modern feel
                     .background(MaterialTheme.colorScheme.primary, shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
@@ -65,28 +57,52 @@ fun AccountScreen(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
+
+            Spacer(modifier = Modifier.height(SpaceExtraLarge))
+
+            HorizontalDivider(thickness = StrokeWidthThick)
+
+            Spacer(modifier = Modifier.height(ContentSpacing))
+
+            // Section 1
+            AccountRow(stringResource(id = R.string.personal_info), onPersonalInfoClick, leadingIcon = Icons.Default.Person)
+            AccountRow(stringResource(id = R.string.my_vehicle), onMyVehicleClick, leadingPainter = R.drawable.baseline_directions_car_24)
+
+            Spacer(modifier = Modifier.height(ContentSpacing))
+
+            HorizontalDivider(thickness = StrokeWidthThick)
+
+            Spacer(modifier = Modifier.height(ContentSpacing))
+
+            // Section 2
+            AccountRow(stringResource(id = R.string.security), onSecurityClick, leadingIcon = Icons.Default.Settings)
+            AccountRow(
+                title = stringResource(id = R.string.dark_mode),
+                onClick = { },
+                leadingPainter = R.drawable.outline_dark_mode_24,
+                trailingContent = {
+                    Switch(
+                        checked = isDarkMode,
+                        onCheckedChange = onDarkModeToggle,
+                        modifier = Modifier.padding(end = SpaceMedium)
+                    )
+                }
+            )
+
+            Spacer(modifier = Modifier.height(ContentSpacing))
+
+            HorizontalDivider(thickness = StrokeWidthThick)
+
+            Spacer(modifier = Modifier.height(ContentSpacing))
+
+            // Sign out (highlighted)
+            AccountRow(
+                title = stringResource(id = R.string.sign_out),
+                onClick = onSignOutClick,
+                textColor = MaterialTheme.colorScheme.error,
+                leadingIcon = Icons.AutoMirrored.Filled.ExitToApp
+            )
         }
-        HorizontalDivider(thickness = 2.dp)
-        Spacer(modifier = Modifier.height(24.dp))
-
-        AccountRow(stringResource(id = R.string.personal_info), onPersonalInfoClick)
-        AccountRow(stringResource(id = R.string.my_vehicle), onMyVehicleClick)
-
-        HorizontalDivider(thickness = 2.dp)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        AccountRow(stringResource(id = R.string.security), onSecurityClick)
-        AccountRow(stringResource(id = R.string.language), onLanguageClick)
-        AccountRow(stringResource(id = R.string.dark_mode), {})
-
-        HorizontalDivider(thickness = 2.dp)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        AccountRow(
-            title = stringResource(id = R.string.sign_out),
-            onClick = onSignOutClick,
-            textColor = MaterialTheme.colorScheme.error
-        )
     }
 }
 
@@ -95,36 +111,55 @@ fun AccountRow(
     title: String,
     onClick: () -> Unit,
     textColor: Color = MaterialTheme.colorScheme.onSurface,
-    leadingIcon: ImageVector = Icons.Default.AccountCircle,
-    trailingIcon: ImageVector = Icons.AutoMirrored.Filled.ArrowForward
+    leadingIcon: ImageVector? = null,
+    leadingPainter: Int? = null,
+    trailingIcon: ImageVector = Icons.AutoMirrored.Filled.ArrowForward,
+    trailingContent: (@Composable () -> Unit)? = null,  // optional trailing composable
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable { onClick() },
+            .padding(vertical = ElementSpacing)
+            .clickable(enabled = trailingContent == null) { onClick() },  // disable click if trailingContent (like switch) handles it
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = leadingIcon,
-            contentDescription = null,
-            tint = textColor,
-            modifier = Modifier.padding(start = 16.dp)
-        )
+        if (leadingIcon != null) {
+            Icon(
+                imageVector = leadingIcon,
+                contentDescription = null,
+                tint = textColor,
+                modifier = Modifier.padding(start = SpaceMedium)
+            )
+        } else if (leadingPainter != null) {
+            Icon(
+                painter = painterResource(id = leadingPainter),
+                contentDescription = null,
+                tint = textColor,
+                modifier = Modifier.padding(start = SpaceMedium)
+            )
+        } else {
+            Spacer(modifier = Modifier.width(SpaceLarge)) // space placeholder for alignment
+        }
 
         Text(
             text = title,
             color = textColor,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(1f).padding(horizontal = 16.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = SpaceMedium)
         )
 
-        Icon(
-            imageVector = trailingIcon,
-            contentDescription = null,
-            tint = textColor,
-            modifier = Modifier.padding(end = 16.dp)
-        )
+        if (trailingContent != null) {
+            trailingContent()
+        } else {
+            Icon(
+                imageVector = trailingIcon,
+                contentDescription = null,
+                tint = textColor,
+                modifier = Modifier.padding(end = SpaceMedium)
+            )
+        }
     }
 }

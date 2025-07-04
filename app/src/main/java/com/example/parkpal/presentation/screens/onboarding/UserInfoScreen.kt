@@ -22,6 +22,8 @@ import com.example.parkpal.domain.model.User
 import com.example.parkpal.presentation.viewmodel.AuthViewModel
 import com.example.parkpal.presentation.viewmodel.UserViewModel
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import com.example.parkpal.ui.theme.SpaceMedium
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,18 +41,18 @@ fun UserInfoScreen(
     var address by remember { mutableStateOf("") }
     var country by remember { mutableStateOf("") }
     var zipCode by remember { mutableStateOf("") }
-
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
-
     var showSuccessToast by remember { mutableStateOf(false) }
-    val context = LocalContext.current
 
+    val context = LocalContext.current
     val currentUser by userViewModel.currentUser.observeAsState()
-    Log.d("UserInfoScreen", "Current user: $currentUser")
+    val genderOptions = listOf("Male", "Female", "Other")
+    var genderExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -58,44 +60,50 @@ fun UserInfoScreen(
                 title = { Text(stringResource(R.string.complete_profile)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back)
-                        )
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
                 }
             )
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-                    val isPasswordValid = password.isNotBlank() && password == confirmPassword
-
-                    emailError = !isEmailValid
-                    passwordError = !isPasswordValid
-
-                    if (isEmailValid && isPasswordValid) {
-                        val user = User(
-                            name = name,
-                            email = email,
-                            password = password,
-                            phoneNumber = phoneNumber.takeIf { it.isNotBlank() },
-                            gender = gender.takeIf { it.isNotBlank() },
-                            address = address.takeIf { it.isNotBlank() },
-                            city = city,
-                            country = country.takeIf { it.isNotBlank() },
-                            zipCode = zipCode.takeIf { it.isNotBlank() },
-                            birthDate = birthDate,
-                        )
-                        userViewModel.insertUser(user)
-                        authViewModel.signUp(email, password)
-                        onSaveUser()
-                        showSuccessToast = true
-                    }
-                }
+        bottomBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SpaceMedium),
+                contentAlignment = Alignment.Center
             ) {
-                Text(stringResource(R.string.continue_button))
+                Button(
+                    onClick = {
+                        val isEmailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                        val isPasswordValid = password.isNotBlank() && password == confirmPassword
+
+                        emailError = !isEmailValid
+                        passwordError = !isPasswordValid
+
+                        if (isEmailValid && isPasswordValid) {
+                            val user = User(
+                                name = name,
+                                email = email,
+                                password = password,
+                                phoneNumber = phoneNumber.takeIf { it.isNotBlank() },
+                                gender = gender.takeIf { it.isNotBlank() },
+                                address = address.takeIf { it.isNotBlank() },
+                                city = city,
+                                country = country.takeIf { it.isNotBlank() },
+                                zipCode = zipCode.takeIf { it.isNotBlank() },
+                                birthDate = birthDate,
+                            )
+                            userViewModel.insertUser(user)
+                            authViewModel.signUp(email, password)
+                            showSuccessToast = true
+                            onSaveUser()
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(0.85f),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Text(stringResource(R.string.continue_button))
+                }
             }
         }
     ) { paddingValues ->
@@ -103,27 +111,129 @@ fun UserInfoScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
                 .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            // — Personal Info —
+            Text(
+                text = stringResource(R.string.personal_info),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
 
-            TextField(
+            OutlinedTextField(
                 value = name,
-                label = { Text(stringResource(R.string.name)) },
                 onValueChange = { name = it },
+                label = { Text(stringResource(R.string.name)) },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(16.dp))
 
-            TextField(
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = phoneNumber,
+                onValueChange = { phoneNumber = it },
+                label = { Text(stringResource(R.string.phone_number)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = birthDate,
+                onValueChange = { birthDate = it },
+                label = { Text(stringResource(R.string.birthdate_label)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = city,
+                onValueChange = { city = it },
+                label = { Text(stringResource(R.string.city)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Gender dropdown
+            ExposedDropdownMenuBox(
+                expanded = genderExpanded,
+                onExpandedChange = { genderExpanded = !genderExpanded }
+            ) {
+                OutlinedTextField(
+                    value = gender,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text(stringResource(R.string.gender)) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = genderExpanded) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = genderExpanded,
+                    onDismissRequest = { genderExpanded = false }
+                ) {
+                    genderOptions.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(option) },
+                            onClick = {
+                                gender = option
+                                genderExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = address,
+                onValueChange = { address = it },
+                label = { Text(stringResource(R.string.address)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = country,
+                onValueChange = { country = it },
+                label = { Text(stringResource(R.string.country)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = zipCode,
+                onValueChange = { zipCode = it },
+                label = { Text(stringResource(R.string.zip_code)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // — Account Info —
+            Text(
+                text = stringResource(R.string.account_info),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+
+            OutlinedTextField(
                 value = email,
-                label = { Text(stringResource(R.string.email)) },
                 onValueChange = {
                     email = it
                     if (emailError) emailError = false
                 },
                 isError = emailError,
+                label = { Text(stringResource(R.string.email)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -134,65 +244,10 @@ fun UserInfoScreen(
                     style = MaterialTheme.typography.bodySmall
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
 
-            TextField(
-                value = phoneNumber,
-                label = { Text(stringResource(R.string.phone_number)) },
-                onValueChange = { phoneNumber = it },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-            TextField(
-                value = city,
-                label = { Text(stringResource(R.string.city)) },
-                onValueChange = { city = it },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-                value = birthDate,
-                label = { Text(stringResource(R.string.birthdate_label)) },
-                onValueChange = { birthDate = it },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-                value = gender,
-                label = { Text(stringResource(R.string.gender)) },
-                onValueChange = { gender = it },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-                value = address,
-                label = { Text(stringResource(R.string.address)) },
-                onValueChange = { address = it },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-                value = country,
-                label = { Text(stringResource(R.string.country)) },
-                onValueChange = { country = it },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-                value = zipCode,
-                label = { Text(stringResource(R.string.zip_code)) },
-                onValueChange = { zipCode = it },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
+            OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
                 label = { Text(stringResource(R.string.password)) },
@@ -200,9 +255,10 @@ fun UserInfoScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(16.dp))
 
-            TextField(
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = {
                     confirmPassword = it
@@ -214,7 +270,6 @@ fun UserInfoScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 modifier = Modifier.fillMaxWidth()
             )
-
             if (passwordError) {
                 Text(
                     text = stringResource(R.string.passwords_have_to_match),
@@ -227,6 +282,8 @@ fun UserInfoScreen(
                 Toast.makeText(context, stringResource(R.string.signup_successful), Toast.LENGTH_LONG).show()
                 showSuccessToast = false
             }
+
+            Spacer(modifier = Modifier.height(100.dp)) // To avoid FAB overlap
         }
     }
 }

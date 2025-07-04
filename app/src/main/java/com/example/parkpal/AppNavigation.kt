@@ -1,6 +1,6 @@
 package com.example.parkpal
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,8 +33,11 @@ import com.example.parkpal.presentation.viewmodel.MapViewModel
 import com.example.parkpal.presentation.viewmodel.ParkingHistoryViewModel
 import com.example.parkpal.presentation.viewmodel.UserViewModel
 
+@Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AppNavHost(navController: NavHostController = rememberNavController()) {
+fun AppNavHost(
+    navController: NavHostController = rememberNavController()
+) {
     val userViewModel: UserViewModel = hiltViewModel()
     val carViewModel: CarViewModel = hiltViewModel()
     val parkingHistoryViewModel: ParkingHistoryViewModel = hiltViewModel()
@@ -52,9 +55,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry.value?.destination?.route
     val shouldShowBottomNav = bottomNavDestinations.any { it.route == currentRoute }
-
-    var context = LocalContext.current
-
+    val context = LocalContext.current
 
     LaunchedEffect(authState.value) {
         when (authState.value) {
@@ -89,7 +90,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
         NavHost(
             navController = navController,
             startDestination = "welcome",
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.fillMaxSize()
         ) {
             composable("welcome") { WelcomeScreen(
                 onContinueClicked = { navController.navigate("signIn") }
@@ -111,7 +112,8 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
             composable("carInfo") { CarInfoScreen(
                 userViewModel = userViewModel,
                 carViewModel = carViewModel,
-                onCarSaved = { navController.navigate(BottomNavDestination.MyCar.route) }
+                onCarSaved = { navController.navigate(BottomNavDestination.MyCar.route) },
+                onBack = { navController.popBackStack() }
             ) }
 
             composable(BottomNavDestination.MyCar.route) { HomeScreen(
@@ -131,11 +133,12 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
                 onPersonalInfoClick = { navController.navigate("personalInfo") },
                 onMyVehicleClick = { navController.navigate("vehicleInfo") },
                 onSecurityClick = { navController.navigate("settingsScreen") },
-                onLanguageClick = {  },
                 onSignOutClick = {
                     authViewModel.signOut(context)
                     navController.navigate("signIn")
                 },
+                onDarkModeToggle = {},
+                isDarkMode = false
             ) }
 
             composable("personalInfo") { PersonalInfoScreen(

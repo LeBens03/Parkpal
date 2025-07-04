@@ -1,6 +1,7 @@
 package com.example.parkpal.presentation.screens.main
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,17 +15,26 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.parkpal.presentation.AddCarBottomSheetContent
+import com.example.parkpal.ui.theme.Shapes
+import com.example.parkpal.ui.theme.SpaceExtraLarge
+import com.example.parkpal.ui.theme.SpaceExtraSmall
+import com.example.parkpal.ui.theme.SpaceLarge
+import com.example.parkpal.ui.theme.SpaceMedium
+import com.example.parkpal.ui.theme.SpaceSmall
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,15 +92,48 @@ fun MyVehicleScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
-                contentPadding = PaddingValues(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                    .padding(paddingValues)
+                    .padding(SpaceMedium),
+                contentPadding = PaddingValues(SpaceSmall),
+                verticalArrangement = Arrangement.spacedBy(SpaceSmall)
             ) {
-                items(currentUserCars) { car ->
-                    VehicleCard(vehicle = car, onDelete = {
-                        carViewModel.deleteCar(car)
-                        showDeleteToast = true
-                    })
+                items(currentUserCars, key = { it.licensePlate }) { car ->
+
+                    // Create dismiss state per item
+                    val dismissState = rememberSwipeToDismissBoxState(
+                        confirmValueChange = { value ->
+                            if (value == SwipeToDismissBoxValue.EndToStart) {
+                                carViewModel.deleteCar(car)
+                                showDeleteToast = true
+                                true
+                            } else false
+                        }
+                    )
+
+                    SwipeToDismissBox(
+                        state = dismissState,
+                        backgroundContent = {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(vertical = SpaceExtraSmall)
+                                    .clip(Shapes.medium)
+                                    .background(Color.Red),
+                                contentAlignment = Alignment.CenterEnd
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = stringResource(id = R.string.delete),
+                                    tint = Color.White,
+                                    modifier = Modifier.padding(end = SpaceLarge)
+                                )
+                            }
+                        },
+                        content = {
+                            VehicleCard(vehicle = car)
+                        },
+                        enableDismissFromStartToEnd = false
+                    )
                 }
             }
         }
@@ -133,22 +176,21 @@ fun MyVehicleScreen(
 @Composable
 fun VehicleCard(
     vehicle: Car,
-    onDelete: () -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = SpaceExtraSmall)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(SpaceMedium)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_directions_car_24),
                 contentDescription = stringResource(id = R.string.car_icon_desc),
                 modifier = Modifier
                     .size(48.dp)
-                    .padding(end = 16.dp)
+                    .padding(end = SpaceMedium)
             )
 
             Column(
@@ -156,13 +198,9 @@ fun VehicleCard(
             ) {
                 Text(text = vehicle.brand, style = MaterialTheme.typography.titleMedium)
                 Text(
-                    text = stringResource(id = R.string.model, vehicle.model),
+                    text = stringResource(id = R.string.model_label, vehicle.model),
                     style = MaterialTheme.typography.bodyMedium
                 )
-            }
-
-            TextButton(onClick = onDelete) {
-                Text(stringResource(id = R.string.delete), color = MaterialTheme.colorScheme.error)
             }
         }
     }

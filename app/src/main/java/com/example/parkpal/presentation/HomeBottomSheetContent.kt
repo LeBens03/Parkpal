@@ -10,9 +10,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.example.parkpal.R
+import com.example.parkpal.ui.theme.SpaceLarge
+import com.example.parkpal.ui.theme.SpaceMedium
+import com.example.parkpal.ui.theme.SpaceSmall
 import java.util.Locale
 
 @Composable
@@ -26,12 +29,12 @@ fun HomeBottomSheetContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(SpaceLarge)
     ) {
         Text(
             text = stringResource(id = R.string.parking_details),
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = SpaceMedium)
         )
 
         val distanceText = distance?.let {
@@ -41,38 +44,55 @@ fun HomeBottomSheetContent(
         Text(
             text = stringResource(id = R.string.distance_format, distanceText),
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = SpaceSmall)
         )
 
         Text(
-            text = stringResource(id = R.string.address_format, address ?: stringResource(id = R.string.unknown)),
+            text = stringResource(
+                id = R.string.address_format,
+                address ?: stringResource(id = R.string.unknown)
+            ),
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = SpaceLarge)
         )
+
+        // Button style abstraction
+        val buttonModifier = Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.medium)
 
         Button(
             onClick = onNavigateClick,
-            modifier = Modifier.fillMaxWidth()
+            modifier = buttonModifier
         ) {
-            Text(text = stringResource(id = R.string.navigate_with_google_maps))
+            Text(
+                text = stringResource(id = R.string.navigate_with_google_maps),
+                style = MaterialTheme.typography.labelLarge
+            )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(SpaceMedium))
 
         Button(
             onClick = onArrivedClick,
-            modifier = Modifier.fillMaxWidth()
+            modifier = buttonModifier
         ) {
-            Text(text = stringResource(id = R.string.i_arrived))
+            Text(
+                text = stringResource(id = R.string.i_arrived),
+                style = MaterialTheme.typography.labelLarge
+            )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(SpaceMedium))
 
         Button(
             onClick = onShareClick,
-            modifier = Modifier.fillMaxWidth()
+            modifier = buttonModifier
         ) {
-            Text(text = stringResource(id = R.string.share_location))
+            Text(
+                text = stringResource(id = R.string.share_location),
+                style = MaterialTheme.typography.labelLarge
+            )
         }
     }
 }
