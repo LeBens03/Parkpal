@@ -34,12 +34,14 @@
     <string name="car_added_successfully">Car added successfully!</string>
 
     <!-- SignIn Screen -->
+    <string name="lets_you_in">Let\'s you in </string>
     <string name="login">Login</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="invalid_email_error">Please enter a valid email</string>
     <string name="password_empty_error">Password cannot be empty</string>
     <string name="no_account_question">Don\'t have an account? </string>
     <string name="sign_up">Sign up</string>
+    <string name="google_logo_content_description">Google Logo</string>
 
     <!-- Home Screen -->
     <string name="park_my_car">Park My Car</string>
@@ -122,4 +124,6 @@
 
     <!-- Google SignIn Client -->
     <string name="web_client_id">337762577181-ojiq3mji9o6vh4uqdimo3sj0lvtmm839.apps.googleusercontent.com</string>
+    <string name="or_divider">or</string>
+    <string name="account_info">Account Info</string>
 </resources>
