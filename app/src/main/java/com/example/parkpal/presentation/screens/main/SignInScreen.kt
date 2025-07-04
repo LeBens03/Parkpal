@@ -33,11 +33,13 @@ fun SignInScreen(
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
 
+    var loginSubmitted by remember { mutableStateOf(false) }
+
     val authState by authViewModel.authState.collectAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(authState) {
-        if (authState is AuthState.Authenticated) {
+    LaunchedEffect(authState, loginSubmitted) {
+        if (authState is AuthState.Authenticated && loginSubmitted) {
             onSignIn()
         }
     }
@@ -176,6 +178,7 @@ fun SignInScreen(
                 passwordError = !isPasswordValid
 
                 if (isEmailValid && isPasswordValid) {
+                    loginSubmitted = true
                     authViewModel.signIn(email, password)
                 }
             },

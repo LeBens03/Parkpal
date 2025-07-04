@@ -19,14 +19,16 @@ val SectionSpacing = 32.dp        // between large screen sections
 val ElevationSmall = 2.dp
 val ElevationMedium = 4.dp
 val ElevationLarge = 8.dp
+val ElevationExtraLarge = 12.dp
 
 // Corner Radius (Material 3 rounded feel)
 val RadiusSmall = 8.dp
-val RadiusMedium = 16.dp
+val RadiusMedium = 12.dp
 val RadiusLarge = 28.dp
 
 // Logo
 val LogoSize = 280.dp
+val ButtonHeightLarge = 56.dp
 
 // Optional stroke widths or animations (for polish)
 val StrokeWidthThin = 1.dp
