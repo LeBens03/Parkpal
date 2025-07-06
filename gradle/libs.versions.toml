@@ -5,6 +5,12 @@ coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+mockito = "5.18.0"
+mockito_inline = "5.2.0"
+mockito_kotlin = "5.4.0"
+androidx_core_testing = "2.2.0"
+kotlinx_coroutines_test = "1.10.2"
+robolectric = "4.13"
 lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
 fragmentKtx = "1.8.8"
@@ -34,6 +40,12 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+mockito_core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockito_kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito_kotlin" }
+mockito_inline = { group = "org.mockito", name = "mockito-inline", version.ref = "mockito_inline" }
+androidx_core_testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "androidx_core_testing" }
+kotlinx_coroutines_test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx_coroutines_test" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
@@ -55,6 +67,8 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-android-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+hilt_android_testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+hilt_compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 # Navigation dependencies
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigation" }

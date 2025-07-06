@@ -16,7 +16,7 @@ class UserViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _currentUser = MutableLiveData<User?>()
+    private val _currentUser = MutableLiveData<User?>(null)
     val currentUser: MutableLiveData<User?> = _currentUser
 
     fun fetchCurrentUser() {
@@ -61,5 +61,9 @@ class UserViewModel @Inject constructor(
     fun clearCurrentUser() {
         Log.d("UserViewModel", "Clearing current user")
         currentUser.value = null
+    }
+
+    fun setCurrentUser(existingUser: User) {
+        currentUser.value = existingUser
     }
 }
