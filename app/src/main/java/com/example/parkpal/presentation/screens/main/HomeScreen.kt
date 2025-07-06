@@ -13,16 +13,10 @@ import com.example.parkpal.presentation.viewmodel.MapViewModel
 import com.google.maps.android.compose.GoogleMap
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,8 +48,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.example.parkpal.R
 import com.example.parkpal.domain.model.Car
-import com.example.parkpal.presentation.HomeBottomSheetContent
-import com.example.parkpal.presentation.ShowCarsBottomSheetContent
+import com.example.parkpal.presentation.modals.HomeBottomSheetContent
+import com.example.parkpal.presentation.modals.ShowCarsBottomSheetContent
 import com.example.parkpal.presentation.viewmodel.ParkingHistoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

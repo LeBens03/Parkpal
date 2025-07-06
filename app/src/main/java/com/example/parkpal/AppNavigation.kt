@@ -36,7 +36,9 @@ import com.example.parkpal.presentation.viewmodel.UserViewModel
 @Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AppNavHost(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    isDarkTheme: Boolean,
+    onDarkThemeToggle: (Boolean) -> Unit
 ) {
     val userViewModel: UserViewModel = hiltViewModel()
     val carViewModel: CarViewModel = hiltViewModel()
@@ -137,8 +139,8 @@ fun AppNavHost(
                     authViewModel.signOut(context)
                     navController.navigate("signIn")
                 },
-                onDarkModeToggle = {},
-                isDarkMode = false
+                onDarkModeToggle = onDarkThemeToggle,
+                isDarkMode = isDarkTheme
             ) }
 
             composable("personalInfo") { PersonalInfoScreen(

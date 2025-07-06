@@ -16,11 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.parkpal.R
 import com.example.parkpal.ui.theme.LogoSize
 import com.example.parkpal.ui.theme.SpaceMedium
-import com.example.parkpal.ui.theme.ParkpalTheme
 import kotlinx.coroutines.delay
 
 @Composable
@@ -50,17 +48,6 @@ fun WelcomeScreen(onContinueClicked: () -> Unit) {
 
         CircularProgressIndicator(
             modifier = Modifier.padding(bottom = SpaceMedium)
-        )
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun WelcomeScreenPreview() {
-    ParkpalTheme {
-        WelcomeScreen(
-            onContinueClicked = {}
         )
     }
 }

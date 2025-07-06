@@ -28,9 +28,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.parkpal.presentation.AddCarBottomSheetContent
+import com.example.parkpal.presentation.modals.AddCarBottomSheetContent
 import com.example.parkpal.ui.theme.Shapes
-import com.example.parkpal.ui.theme.SpaceExtraLarge
 import com.example.parkpal.ui.theme.SpaceExtraSmall
 import com.example.parkpal.ui.theme.SpaceLarge
 import com.example.parkpal.ui.theme.SpaceMedium

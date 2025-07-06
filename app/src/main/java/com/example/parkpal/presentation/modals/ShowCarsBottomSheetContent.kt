@@ -1,4 +1,4 @@
-package com.example.parkpal.presentation
+package com.example.parkpal.presentation.modals
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
