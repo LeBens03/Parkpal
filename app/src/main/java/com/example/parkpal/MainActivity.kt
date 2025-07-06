@@ -11,6 +11,11 @@ import androidx.compose.runtime.setValue
 import com.example.parkpal.ui.theme.ParkpalTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Main entry point of the Parkpal app.
+ *
+ * Manages theme (light/dark) toggle and hosts the app's navigation.
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

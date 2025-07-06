@@ -14,7 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.parkpal.presentation.BottomNavDestination
+import com.example.parkpal.presentation.utils.BottomNavDestination
 import com.example.parkpal.presentation.BottomNavigationBar
 import com.example.parkpal.presentation.screens.main.AccountScreen
 import com.example.parkpal.presentation.screens.main.HomeScreen
@@ -33,6 +33,20 @@ import com.example.parkpal.presentation.viewmodel.MapViewModel
 import com.example.parkpal.presentation.viewmodel.ParkingHistoryViewModel
 import com.example.parkpal.presentation.viewmodel.UserViewModel
 
+/**
+ * The main navigation host for the ParkPal app.
+ *
+ * This composable sets up the navigation graph and handles
+ * navigation between onboarding screens, authentication screens,
+ * and the main app screens accessible via bottom navigation.
+ *
+ * It observes authentication state to update user and car data accordingly.
+ * It shows or hides the bottom navigation bar depending on the current screen.
+ *
+ * @param navController The [NavHostController] managing navigation. Defaults to a remembered controller.
+ * @param isDarkTheme Boolean flag to indicate if the app is currently in dark mode.
+ * @param onDarkThemeToggle Callback to toggle the dark theme mode.
+ */
 @Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AppNavHost(

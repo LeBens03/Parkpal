@@ -10,12 +10,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import com.example.parkpal.presentation.utils.BottomNavDestination
 import com.example.parkpal.ui.theme.*
 
 @Composable
 fun BottomNavigationBar(
     currentDestination: BottomNavDestination,
     onDestinationClicked: (BottomNavDestination) -> Unit,
+    destinations: List<BottomNavDestination> = listOf(
+        BottomNavDestination.MyCar,
+        BottomNavDestination.ParkingHistory,
+        BottomNavDestination.Account
+    )
 ) {
     Box(
         modifier = Modifier
@@ -31,11 +37,7 @@ fun BottomNavigationBar(
                 .shadow(elevation = ElevationExtraLarge, shape = RoundedCornerShape(RadiusLarge)),
             tonalElevation = ElevationSmall,
         ) {
-            listOf(
-                BottomNavDestination.MyCar,
-                BottomNavDestination.ParkingHistory,
-                BottomNavDestination.Account
-            ).forEach { destination ->
+            destinations.forEach { destination ->
                 NavigationBarItem(
                     icon = {
                         Icon(

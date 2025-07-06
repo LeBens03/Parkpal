@@ -25,7 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.example.parkpal.domain.model.ParkingLocation
-import com.example.parkpal.presentation.MapEvent
+import com.example.parkpal.presentation.utils.MapEvent
 import com.example.parkpal.presentation.viewmodel.CarViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition

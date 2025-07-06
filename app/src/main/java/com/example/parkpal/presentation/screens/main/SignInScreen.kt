@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -64,7 +65,8 @@ fun SignInScreen(
             onClick = { authViewModel.signInWithGoogle(context) },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp), // Match TextField height
+                .height(56.dp)
+                .testTag("googleSignInButton"),
             shape = MaterialTheme.shapes.medium,
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -127,7 +129,7 @@ fun SignInScreen(
             label = { Text(stringResource(R.string.email)) },
             isError = emailError,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().testTag("emailField"),
             shape = MaterialTheme.shapes.medium,
             singleLine = true
         )
@@ -153,7 +155,7 @@ fun SignInScreen(
             isError = passwordError,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().testTag("passwordField"),
             shape = MaterialTheme.shapes.medium,
             singleLine = true
         )
@@ -182,7 +184,7 @@ fun SignInScreen(
                     authViewModel.signIn(email, password)
                 }
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().testTag("signInButton"),
             shape = MaterialTheme.shapes.medium
         ) {
             Text(

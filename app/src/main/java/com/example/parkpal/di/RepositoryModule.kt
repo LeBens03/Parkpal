@@ -9,7 +9,7 @@ import com.example.parkpal.domain.repository.CarRepository
 import com.example.parkpal.domain.repository.ParkingHistoryRepository
 import com.example.parkpal.domain.repository.ParkingLocationRepository
 import com.example.parkpal.domain.repository.UserRepository
-import com.example.parkpal.presentation.UserLocationImpl
+import com.example.parkpal.presentation.utils.UserLocationImpl
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
@@ -19,48 +19,63 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Provides repository instances and location-related dependencies for DI.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
 
+    /**
+     * Provides a singleton UserRepository instance.
+     */
     @Singleton
     @Provides
-    fun provideUserRepository(userDao: UserDao): UserRepository {
-        return UserRepository(userDao)
-    }
+    fun provideUserRepository(userDao: UserDao): UserRepository =
+        UserRepository(userDao)
 
+    /**
+     * Provides a singleton CarRepository instance.
+     */
     @Singleton
     @Provides
-    fun provideCarRepository(carDao: CarDao): CarRepository {
-        return CarRepository(carDao)
-    }
+    fun provideCarRepository(carDao: CarDao): CarRepository =
+        CarRepository(carDao)
 
+    /**
+     * Provides a singleton ParkingLocationRepository instance.
+     */
     @Singleton
     @Provides
-    fun provideParkingLocationRepository(parkingLocationDao: ParkingLocationDao) : ParkingLocationRepository {
-        return ParkingLocationRepository(parkingLocationDao)
-    }
+    fun provideParkingLocationRepository(parkingLocationDao: ParkingLocationDao): ParkingLocationRepository =
+        ParkingLocationRepository(parkingLocationDao)
 
-    @Provides
+    /**
+     * Provides a singleton FusedLocationProviderClient instance for location services.
+     */
     @Singleton
+    @Provides
     fun provideFusedLocationProviderClient(
         @ApplicationContext context: Context
-    ): FusedLocationProviderClient {
-        return LocationServices.getFusedLocationProviderClient(context)
-    }
+    ): FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(context)
 
-    @Provides
+    /**
+     * Provides a singleton UserLocationImpl instance, implementing UserLocation interface.
+     */
     @Singleton
+    @Provides
     fun provideUserLocationImpl(
         @ApplicationContext context: Context,
         fusedLocationClient: FusedLocationProviderClient
-    ): UserLocationImpl {
-        return UserLocationImpl(context, fusedLocationClient)
-    }
+    ): UserLocationImpl =
+        UserLocationImpl(context, fusedLocationClient)
 
-    @Provides
+    /**
+     * Provides a singleton ParkingHistoryRepository instance.
+     */
     @Singleton
-    fun provideParkingHistoryRepository(parkingHistoryDao: ParkingHistoryDao) : ParkingHistoryRepository {
-        return ParkingHistoryRepository(parkingHistoryDao)
-    }
+    @Provides
+    fun provideParkingHistoryRepository(parkingHistoryDao: ParkingHistoryDao): ParkingHistoryRepository =
+        ParkingHistoryRepository(parkingHistoryDao)
 }

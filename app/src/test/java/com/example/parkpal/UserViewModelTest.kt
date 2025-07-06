@@ -1,11 +1,10 @@
-package com.example.parkpal.viewmodel
+package com.example.parkpal
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.example.parkpal.domain.model.User
 import com.example.parkpal.domain.repository.UserRepository
-import com.example.parkpal.getOrAwaitValue
 import com.example.parkpal.presentation.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -20,18 +19,13 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlinx.coroutines.time.delay
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.atLeastOnce
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.mockStatic
-import org.mockito.Mockito.times
+import org.mockito.Mockito
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -51,7 +45,7 @@ class UserViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        userRepository = mock() // Mockito
+        userRepository = Mockito.mock() // Mockito
         userViewModel = UserViewModel(userRepository)
     }
 
@@ -63,11 +57,11 @@ class UserViewModelTest {
     @Test
     fun `getCurrentUser initial state`() {
         val value = userViewModel.currentUser.getOrAwaitValue()
-        assertNull(value)
+        Assert.assertNull(value)
     }
 
     @Test
-    fun `fetchCurrentUser   successful fetch`() = runTest{
+    fun `fetchCurrentUser   successful fetch`() = runTest {
         val mockEmail = "test@gmail.com"
         val expectedUser = User(
             userId = 1L,
@@ -83,11 +77,11 @@ class UserViewModelTest {
             birthDate = "1990-01-01"
         )
 
-        mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
-            val firebaseUser = mock(FirebaseUser::class.java)
+        Mockito.mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
+            val firebaseUser = Mockito.mock(FirebaseUser::class.java)
             whenever(firebaseUser.email).thenReturn(mockEmail)
 
-            val auth = mock(FirebaseAuth::class.java)
+            val auth = Mockito.mock(FirebaseAuth::class.java)
             whenever(auth.currentUser).thenReturn(firebaseUser)
             firebaseAuthMock.`when`<Any> { FirebaseAuth.getInstance() }.thenReturn(auth)
 
@@ -102,15 +96,15 @@ class UserViewModelTest {
 
             // Assert
             val result = userViewModel.currentUser.getOrAwaitValue()
-            assertEquals(expectedUser, result)
+            Assert.assertEquals(expectedUser, result)
         }
     }
 
     @Test
     fun `fetchCurrentUser   user not authenticated`() = runTest {
-        mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
+        Mockito.mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
             // Mock FirebaseAuth and its currentUser to null (user not authenticated)
-            val auth = mock(FirebaseAuth::class.java)
+            val auth = Mockito.mock(FirebaseAuth::class.java)
             whenever(auth.currentUser).thenReturn(null)
             firebaseAuthMock.`when`<Any> { FirebaseAuth.getInstance() }.thenReturn(auth)
 
@@ -125,8 +119,8 @@ class UserViewModelTest {
 
             // Verify LiveData remains null (or unchanged)
             val afterValue = userViewModel.currentUser.value
-            assertEquals(beforeValue, afterValue)
-            assertNull(afterValue)
+            Assert.assertEquals(beforeValue, afterValue)
+            Assert.assertNull(afterValue)
         }
     }
 
@@ -134,11 +128,11 @@ class UserViewModelTest {
     fun `fetchCurrentUser   repository throws exception`() = runTest {
         val mockEmail = "test@gmail.com"
 
-        mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
-            val firebaseUser = mock(FirebaseUser::class.java)
+        Mockito.mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
+            val firebaseUser = Mockito.mock(FirebaseUser::class.java)
             whenever(firebaseUser.email).thenReturn(mockEmail)
 
-            val auth = mock(FirebaseAuth::class.java)
+            val auth = Mockito.mock(FirebaseAuth::class.java)
             whenever(auth.currentUser).thenReturn(firebaseUser)
             firebaseAuthMock.`when`<Any> { FirebaseAuth.getInstance() }.thenReturn(auth)
 
@@ -150,7 +144,7 @@ class UserViewModelTest {
 
             // Assert
             val result = userViewModel.currentUser.getOrAwaitValue()
-            assertNull(result)
+            Assert.assertNull(result)
         }
     }
 
@@ -158,11 +152,11 @@ class UserViewModelTest {
     fun `fetchCurrentUser   user not found in repository`() = runTest {
         val mockEmail = "test@gmail.com"
 
-        mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
-            val firebaseUser = mock(FirebaseUser::class.java)
+        Mockito.mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
+            val firebaseUser = Mockito.mock(FirebaseUser::class.java)
             whenever(firebaseUser.email).thenReturn(mockEmail)
 
-            val auth = mock(FirebaseAuth::class.java)
+            val auth = Mockito.mock(FirebaseAuth::class.java)
             whenever(auth.currentUser).thenReturn(firebaseUser)
             firebaseAuthMock.`when`<Any> { FirebaseAuth.getInstance() }.thenReturn(auth)
 
@@ -174,7 +168,7 @@ class UserViewModelTest {
 
             // Assert
             val result = userViewModel.currentUser.getOrAwaitValue()
-            assertNull(result)
+            Assert.assertNull(result)
         }
     }
 
@@ -205,7 +199,7 @@ class UserViewModelTest {
 
         // Assert
         val result = userViewModel.currentUser.getOrAwaitValue()
-        assertEquals(expectedUser, result)
+        Assert.assertEquals(expectedUser, result)
     }
 
     @Test
@@ -247,7 +241,7 @@ class UserViewModelTest {
 
         // Assert: should still be the previous user
         val result = userViewModel.currentUser.getOrAwaitValue()
-        assertEquals(previousUser, result)
+        Assert.assertEquals(previousUser, result)
     }
 
     @Test
@@ -277,7 +271,7 @@ class UserViewModelTest {
 
         // Assert
         val result = userViewModel.currentUser.getOrAwaitValue()
-        assertEquals(newUserId, result?.userId)
+        Assert.assertEquals(newUserId, result?.userId)
     }
 
     @Test
@@ -304,7 +298,7 @@ class UserViewModelTest {
 
         // Assert
         val result = userViewModel.currentUser.getOrAwaitValue()
-        assertEquals(userToUpdate, result)
+        Assert.assertEquals(userToUpdate, result)
     }
 
     @Test
@@ -336,7 +330,7 @@ class UserViewModelTest {
 
         // Assert: currentUser LiveData should remain unchanged (still initialUser)
         val result = userViewModel.currentUser.getOrAwaitValue()
-        assertEquals(initialUser, result)
+        Assert.assertEquals(initialUser, result)
     }
 
     @Test
@@ -365,7 +359,7 @@ class UserViewModelTest {
 
         // currentUser should remain unchanged (initial value)
         val result = userViewModel.currentUser.getOrAwaitValue()
-        assertEquals(initialUser, result)
+        Assert.assertEquals(initialUser, result)
     }
 
     @Test
@@ -391,21 +385,21 @@ class UserViewModelTest {
 
         // Assert: currentUser is null
         val clearedUser = userViewModel.currentUser.getOrAwaitValue()
-        assertNull(clearedUser)
+        Assert.assertNull(clearedUser)
     }
 
     @Test
     fun `clearCurrentUser   when current user is already null`() = runTest {
         // Arrange: currentUser is initially null (default state)
         val initial = userViewModel.currentUser.getOrAwaitValue()
-        assertNull(initial)
+        Assert.assertNull(initial)
 
         // Act: call clearCurrentUser()
         userViewModel.clearCurrentUser()
 
         // Assert: currentUser remains null
         val afterClear = userViewModel.currentUser.getOrAwaitValue()
-        assertNull(afterClear)
+        Assert.assertNull(afterClear)
     }
 
 
@@ -414,11 +408,11 @@ class UserViewModelTest {
         val mockEmail = "test@gmail.com"
 
         // Mock FirebaseAuth to return a valid user email
-        mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
-            val firebaseUser = mock(FirebaseUser::class.java)
+        Mockito.mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
+            val firebaseUser = Mockito.mock(FirebaseUser::class.java)
             whenever(firebaseUser.email).thenReturn(mockEmail)
 
-            val auth = mock(FirebaseAuth::class.java)
+            val auth = Mockito.mock(FirebaseAuth::class.java)
             whenever(auth.currentUser).thenReturn(firebaseUser)
             firebaseAuthMock.`when`<Any> { FirebaseAuth.getInstance() }.thenReturn(auth)
 
@@ -443,7 +437,7 @@ class UserViewModelTest {
 
             // The LiveData value should remain null because the coroutine was cancelled before it could set a value
             val result = userViewModel.currentUser.value
-            assertNull(result)
+            Assert.assertNull(result)
         }
     }
 
@@ -451,23 +445,39 @@ class UserViewModelTest {
     fun `LiveData observation`() = runTest {
         val mockEmail = "test@gmail.com"
         val user1 = User(
-            userId = 1L, name = "User One", email = mockEmail,
-            password = "pass1", phoneNumber = "123", gender = "M",
-            address = "Addr1", city = "City1", country = "Country1", zipCode = "111", birthDate = "2000-01-01"
+            userId = 1L,
+            name = "User One",
+            email = mockEmail,
+            password = "pass1",
+            phoneNumber = "123",
+            gender = "M",
+            address = "Addr1",
+            city = "City1",
+            country = "Country1",
+            zipCode = "111",
+            birthDate = "2000-01-01"
         )
         val user2 = User(
-            userId = 2L, name = "User Two", email = mockEmail,
-            password = "pass2", phoneNumber = "456", gender = "F",
-            address = "Addr2", city = "City2", country = "Country2", zipCode = "222", birthDate = "2001-02-02"
+            userId = 2L,
+            name = "User Two",
+            email = mockEmail,
+            password = "pass2",
+            phoneNumber = "456",
+            gender = "F",
+            address = "Addr2",
+            city = "City2",
+            country = "Country2",
+            zipCode = "222",
+            birthDate = "2001-02-02"
         )
 
-        val observer = mock<Observer<User?>>()
+        val observer = Mockito.mock<Observer<User?>>()
         userViewModel.currentUser.observeForever(observer)
 
-        mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
-            val firebaseUser = mock<FirebaseUser>()
+        Mockito.mockStatic(FirebaseAuth::class.java).use { firebaseAuthMock ->
+            val firebaseUser = Mockito.mock<FirebaseUser>()
             whenever(firebaseUser.email).thenReturn(mockEmail)
-            val auth = mock<FirebaseAuth>()
+            val auth = Mockito.mock<FirebaseAuth>()
             whenever(auth.currentUser).thenReturn(firebaseUser)
             firebaseAuthMock.`when`<Any> { FirebaseAuth.getInstance() }.thenReturn(auth)
 
@@ -489,7 +499,7 @@ class UserViewModelTest {
         }
 
         val captor = argumentCaptor<User>()
-        verify(observer, atLeastOnce()).onChanged(captor.capture())
+        verify(observer, Mockito.atLeastOnce()).onChanged(captor.capture())
         val emittedValues = captor.allValues
 
         // Expected sequence (may start with initial null emitted by LiveData)
@@ -499,7 +509,7 @@ class UserViewModelTest {
 
         // You can check that emittedValues contains at least all expected states in order
         // Or exactly equals expected sequence if your LiveData starts with null:
-        assertEquals(expectedSequence, emittedValues)
+        Assert.assertEquals(expectedSequence, emittedValues)
 
         userViewModel.currentUser.removeObserver(observer)
     }
@@ -523,7 +533,7 @@ class UserViewModelTest {
         // Mock repository to assign userId 10 on insert
         whenever(userRepository.insertUser(incompleteUser)).thenReturn(10L)
 
-        val observer = mock<Observer<User?>>()
+        val observer = Mockito.mock<Observer<User?>>()
         userViewModel.currentUser.observeForever(observer)
 
         userViewModel.insertUser(incompleteUser)
@@ -554,7 +564,7 @@ class UserViewModelTest {
 
         whenever(userRepository.updateUser(updatedUser)).thenReturn(Unit)
 
-        val observer = mock<Observer<User?>>()
+        val observer = Mockito.mock<Observer<User?>>()
         userViewModel.currentUser.observeForever(observer)
 
         userViewModel.updateUser(updatedUser)
